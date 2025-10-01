@@ -3,8 +3,6 @@
 GROUP="admin"
 
 FILE="/etc/ssh/sshd_config"
-PF_CONF_D_TABLES="/etc/pf.conf.d/tables"
-PF_SSH_IP_LIST="ssh_ip_list.table"
 
 # must run as root
 if [ "$(id -u)" -ne 0 ]; then
@@ -13,8 +11,6 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 [ -f "$FILE" ] && cp "$FILE" "${FILE}_"`date +%d%m%y%H%M%S`
-
-[ ! -d "$PF_CONF_D_TABLES" ] && mkdir -p "$PF_CONF_D_TABLES"
 
 
 case "$(uname -s)" in
@@ -60,9 +56,6 @@ EOF
 
     echo "ListenAddress $a"
 
-    if [ ! $(ls -lo /etc/pf.conf.d/ | grep tables | awk '{ print $5 }') = "schg" ]; then
-      echo "$a" >> "${PF_CONF_D_TABLES}/${PF_SSH_IP_LIST}"
-    fi
   done
 } | tee -a "$FILE"
 
