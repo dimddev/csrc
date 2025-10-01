@@ -6,16 +6,11 @@ FILE="/etc/ssh/sshd_config"
 PF_CONF_D_TABLES="/etc/pf.conf.d/tables"
 PF_SSH_IP_LIST="ssh_ip_list.table"
 
-ADDED=0
-NUMUSER=0
-
 # must run as root
 if [ "$(id -u)" -ne 0 ]; then
   printf '%s\n' "Error: this script must be run as root." >&2
   exit 1
 fi
-
-MATCH="-A1" # For OpenBSD
 
 [ -f "$FILE" ] && cp "$FILE" "${FILE}_"`date +%d%m%y%H%M%S`
 
@@ -61,10 +56,6 @@ EOF
 
     if grep -q "$a" $FILE; then
       continue
-    fi
-
-    if [ $ADDED -eq 0 ]; then
-      ADDED=1
     fi
 
     echo "ListenAddress $a"
